@@ -1,0 +1,443 @@
+<div class="dash-shell">
+  <!-- ── SKELETON ────────────────────────────────────────────────────────── -->
+  <ng-container *ngIf="loading">
+    <p-skeleton height="110px" borderRadius="16px"></p-skeleton>
+    <div class="kpi-grid">
+      <p-skeleton
+        *ngFor="let i of [1, 2, 3, 4, 5, 6, 7]"
+        height="96px"
+        borderRadius="14px"
+      ></p-skeleton>
+    </div>
+    <p-skeleton height="64px" borderRadius="12px"></p-skeleton>
+    <div class="two-col">
+      <p-skeleton height="280px" borderRadius="14px"></p-skeleton>
+      <p-skeleton height="280px" borderRadius="14px"></p-skeleton>
+    </div>
+  </ng-container>
+
+  <!-- ── ERROR ────────────────────────────────────────────────────────────── -->
+  <div class="dash-error" *ngIf="error && !loading">
+    <i class="pi pi-exclamation-circle"></i>
+    <span>{{ error }}</span>
+    <button class="retry-btn" (click)="loadAll()">
+      <i class="pi pi-refresh"></i> Retry
+    </button>
+  </div>
+
+  <ng-container *ngIf="!loading && !error && dashboard">
+    <!-- ══════════════════════════════════════════════════════
+         1. WELCOME BANNER
+    ══════════════════════════════════════════════════════ -->
+    <div class="welcome-banner">
+      <div class="wb-left">
+        <div class="wb-greeting">{{ greeting }}</div>
+        <div class="wb-name">{{ profile?.NAME1 || kunnr }}</div>
+        <div class="wb-sub">Here's your live business summary from SAP ERP</div>
+      </div>
+      <div class="wb-right">
+        <div class="wb-chip wb-chip--live">
+          <span class="live-dot"></span> Live SAP Data
+        </div>
+        <div class="wb-chip wb-chip--date">
+          <i class="pi pi-calendar"></i> {{ today | date: "EEE, d MMM yyyy" }}
+        </div>
+        <div
+          class="wb-chip wb-chip--alert"
+          *ngIf="criticalCount > 0"
+          (click)="navigate('/aging')"
+        >
+          <i class="pi pi-bell"></i> {{ criticalCount }} Alert{{
+            criticalCount > 1 ? "s" : ""
+          }}
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         2. KPI STRIP  (6 cards — all clickable)
+    ══════════════════════════════════════════════════════ -->
+    <div class="kpi-grid">
+      <!-- Deliveries -->
+      <div class="kpi-card" (click)="navigate('/delivery')">
+        <div class="kpi-icon" style="background: #d1fae5; color: #059669">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3"/>
+            <rect x="9" y="11" width="14" height="10" rx="1"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color: #059669">{{ totalDeliveries }}</div>
+          <div class="kpi-lbl">Total Deliveries</div>
+          <div class="kpi-sub">{{ completedDeliveries }} completed</div>
+        </div>
+        <i class="pi pi-chevron-right kpi-arrow"></i>
+      </div>
+
+      <!-- Sales Orders -->
+      <div class="kpi-card" (click)="navigate('/sales')">
+        <div class="kpi-icon" style="background: #ede9fe; color: #7c3aed">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color: #7c3aed">{{ totalSalesOrders }}</div>
+          <div class="kpi-lbl">Sales Orders</div>
+          <div class="kpi-sub">
+            <span class="so-dot so-dot--green"></span>{{ completedSalesOrders }}
+            <span class="so-dot so-dot--blue" style="margin-left:6px"></span>{{ inProcessSalesOrders }}
+            <span class="so-dot so-dot--amber" style="margin-left:6px"></span>{{ partialSalesOrders }}
+          </div>
+        </div>
+        <i class="pi pi-chevron-right kpi-arrow"></i>
+      </div>
+
+      <div class="kpi-card" (click)="navigate('/invoice')">
+        <div class="kpi-icon" style="background: #dbeafe; color: #1d4ed8">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="20"
+            height="20"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color: #1d4ed8">{{ totalInvoices }}</div>
+          <div class="kpi-lbl">Invoices</div>
+          <div class="kpi-sub">
+            {{ revenueCurrency }} {{ fmt(totalRevenue) }}
+          </div>
+        </div>
+        <i class="pi pi-chevron-right kpi-arrow"></i>
+      </div>
+
+      <div
+        class="kpi-card kpi-card--warn"
+        (click)="navigate('/sales')"
+        *ngIf="openOrders > 0"
+      >
+        <div class="kpi-icon" style="background: #fee2e2; color: #dc2626">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="20"
+            height="20"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color: #dc2626">{{ openOrders }}</div>
+          <div class="kpi-lbl">Open Orders</div>
+          <div class="kpi-sub kpi-sub--warn">Needs attention</div>
+        </div>
+        <i class="pi pi-chevron-right kpi-arrow"></i>
+      </div>
+
+      <div class="kpi-card" (click)="navigate('/finance')">
+        <div class="kpi-icon" style="background: #d1fae5; color: #059669">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="20"
+            height="20"
+          >
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+            <polyline points="17 6 23 6 23 12" />
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color: #059669">
+            {{ creditNoteCount }}
+          </div>
+          <div class="kpi-lbl">Credit Notes</div>
+          <div class="kpi-sub">
+            {{ debitNoteCount }} debit note{{ debitNoteCount !== 1 ? "s" : "" }}
+          </div>
+        </div>
+        <i class="pi pi-chevron-right kpi-arrow"></i>
+      </div>
+
+      <div
+        class="kpi-card"
+        (click)="navigate('/aging')"
+        [class.kpi-card--warn]="overdueCount > 0"
+      >
+        <div
+          class="kpi-icon"
+          [style.background]="overdueCount > 0 ? '#FEE2E2' : '#FEF3C7'"
+          [style.color]="overdueCount > 0 ? '#DC2626' : '#D97706'"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="20"
+            height="20"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div
+            class="kpi-val"
+            [style.color]="overdueCount > 0 ? '#DC2626' : '#D97706'"
+          >
+            {{ overdueCount }}
+          </div>
+          <div class="kpi-lbl">90+ Day Overdue</div>
+          <div class="kpi-sub" [class.kpi-sub--warn]="overdueCount > 0">
+            {{ overdueCount > 0 ? "Action required" : "Clear ✓" }}
+          </div>
+        </div>
+        <i class="pi pi-chevron-right kpi-arrow"></i>
+      </div>
+
+      <div class="kpi-card" (click)="navigate('/inquiries')">
+        <div class="kpi-icon" style="background: #ede9fe; color: #7c3aed">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="20"
+            height="20"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color: #7c3aed">{{ inquiryCount }}</div>
+          <div class="kpi-lbl">Inquiries</div>
+          <div class="kpi-sub">Sales inquiries</div>
+        </div>
+        <i class="pi pi-chevron-right kpi-arrow"></i>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         3. NOTIFICATIONS  (only when there are alerts)
+    ══════════════════════════════════════════════════════ -->
+    <div class="notif-section" *ngIf="notifications.length">
+      <div class="section-hdr">
+        <span class="section-title">
+          <i class="pi pi-bell"></i> Alerts &amp; Notifications
+        </span>
+        <span class="notif-count-badge">{{ notifications.length }}</span>
+      </div>
+      <div class="notif-grid">
+        <div
+          class="notif-card notif-card--{{ n.type }}"
+          *ngFor="let n of notifications"
+          (click)="navigate(n.route)"
+        >
+          <div class="notif-icon-wrap">
+            <i class="pi {{ n.icon }}"></i>
+          </div>
+          <div class="notif-body">
+            <div class="notif-title">{{ n.title }}</div>
+            <div class="notif-msg">{{ n.message }}</div>
+          </div>
+          <div class="notif-count">{{ n.count }}</div>
+          <i class="pi pi-arrow-right notif-go"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         4. CHARTS ROW  (Delivery status + Order values)
+    ══════════════════════════════════════════════════════ -->
+    <div class="two-col">
+      <!-- Delivery Status Donut -->
+      <div class="dash-card">
+        <div class="card-hdr">
+          <span class="card-title">Delivery Status</span>
+          <button class="card-link" (click)="navigate('/delivery')">
+            View all <i class="pi pi-arrow-right"></i>
+          </button>
+        </div>
+        <div class="donut-wrap">
+          <div class="donut-chart">
+            <p-chart
+              type="doughnut"
+              [data]="deliveryChartData"
+              [options]="chartOptions"
+              height="190px"
+            ></p-chart>
+          </div>
+          <div class="donut-legend">
+            <div class="dl-row" *ngFor="let s of deliveryStats">
+              <span class="dl-dot" [style.background]="s.color"></span>
+              <span class="dl-label">{{ s.label }}</span>
+              <span class="dl-count">{{ s.count }}</span>
+              <div class="dl-bar-wrap">
+                <div
+                  class="dl-bar"
+                  [style.width.%]="s.pct"
+                  [style.background]="s.color"
+                ></div>
+              </div>
+              <span class="dl-pct">{{ s.pct }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aging Snapshot -->
+      <div
+        class="dash-card"
+        (click)="navigate('/aging')"
+        style="cursor: pointer"
+      >
+        <div class="card-hdr">
+          <span class="card-title">Aging Snapshot</span>
+          <button class="card-link" (click)="navigate('/aging')">
+            Full report <i class="pi pi-arrow-right"></i>
+          </button>
+        </div>
+        <div class="aging-wrap" *ngIf="agingBuckets.length; else noAging">
+          <div
+            class="aging-row"
+            *ngFor="let b of agingBuckets"
+            (click)="navigate('/aging')"
+          >
+            <div class="aging-dot-wrap">
+              <span class="aging-dot" [style.background]="b.color"></span>
+            </div>
+            <div class="aging-info">
+              <span class="aging-label">{{ b.label }}</span>
+              <span class="aging-docs"
+                >{{ b.count }} doc{{ b.count !== 1 ? "s" : "" }}</span
+              >
+            </div>
+            <div class="aging-amt">
+              <span class="aging-val">{{ fmt(b.total) }}</span>
+              <span class="aging-cur">{{ b.currency }}</span>
+            </div>
+          </div>
+          <div class="aging-total">
+            <span>Total Outstanding</span>
+            <span class="aging-total-val">{{ fmt(totalAgingAmount) }}</span>
+          </div>
+        </div>
+        <ng-template #noAging>
+          <div class="no-data">
+            <i class="pi pi-check-circle"></i
+            ><span>No aging balance found</span>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         5. DATA ROW  (Recent deliveries + Quick navigation)
+    ══════════════════════════════════════════════════════ -->
+    <div class="two-col">
+      <!-- Recent Deliveries -->
+      <div class="dash-card">
+        <div class="card-hdr">
+          <span class="card-title">Recent Deliveries</span>
+          <button class="card-link" (click)="navigate('/sales')">
+            All deliveries <i class="pi pi-arrow-right"></i>
+          </button>
+        </div>
+        <div class="recent-list" *ngIf="recentDeliveries.length; else noDel">
+          <div class="recent-row" *ngFor="let d of recentDeliveries">
+            <div
+              class="recent-status-dot"
+              [style.background]="deliveryColor(d.GBSTA)"
+            ></div>
+            <div class="recent-info">
+              <span class="recent-id">{{ d.VBELN }}</span>
+              <span class="recent-date">{{ formatDate(d.ERDAT) }}</span>
+            </div>
+            <div class="recent-type">{{ deliveryTypeName(d.LFART) }}</div>
+            <div
+              class="recent-badge"
+              [style.background]="deliveryColor(d.GBSTA) + '1A'"
+              [style.color]="deliveryColor(d.GBSTA)"
+            >
+              {{ deliveryStatus(d.GBSTA) }}
+            </div>
+          </div>
+        </div>
+        <ng-template #noDel>
+          <div class="no-data">
+            <i class="pi pi-inbox"></i><span>No recent deliveries</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Quick Navigation -->
+      <div class="dash-card">
+        <div class="card-hdr">
+          <span class="card-title">Quick Access</span>
+        </div>
+        <div class="qnav-grid">
+          <a routerLink="/sales" class="qnav-item">
+            <div class="qnav-icon" style="background: #ede9fe; color: #7c3aed">
+              <i class="pi pi-shopping-bag"></i>
+            </div>
+            <span class="qnav-lbl">Sales Orders</span>
+            <span class="qnav-count">{{ totalSalesOrders }}</span>
+          </a>
+          <a routerLink="/delivery" class="qnav-item">
+            <div class="qnav-icon" style="background: #d1fae5; color: #059669">
+              <i class="pi pi-send"></i>
+            </div>
+            <span class="qnav-lbl">Deliveries</span>
+            <span class="qnav-count">{{ totalDeliveries }}</span>
+          </a>
+          <a routerLink="/invoice" class="qnav-item">
+            <div class="qnav-icon" style="background: #dbeafe; color: #1d4ed8">
+              <i class="pi pi-file-pdf"></i>
+            </div>
+            <span class="qnav-lbl">Invoices</span>
+            <span class="qnav-count">{{ totalInvoices }}</span>
+          </a>
+          <a routerLink="/finance" class="qnav-item">
+            <div class="qnav-icon" style="background: #fef3c7; color: #d97706">
+              <i class="pi pi-wallet"></i>
+            </div>
+            <span class="qnav-lbl">Finance</span>
+            <span class="qnav-count">{{ creditNoteCount + debitNoteCount }}</span>
+          </a>
+          <a routerLink="/aging" class="qnav-item" [class.qnav-item--alert]="overdueCount > 0">
+            <div class="qnav-icon"
+              [style.background]="overdueCount > 0 ? '#FEE2E2' : '#FFEDD5'"
+              [style.color]="overdueCount > 0 ? '#DC2626' : '#EA580C'">
+              <i class="pi pi-clock"></i>
+            </div>
+            <span class="qnav-lbl">Aging</span>
+            <span class="qnav-count" [style.color]="overdueCount > 0 ? '#DC2626' : ''">{{ overdueCount }}</span>
+          </a>
+          <a routerLink="/inquiries" class="qnav-item">
+            <div class="qnav-icon" style="background: #ede9fe; color: #7c3aed">
+              <i class="pi pi-question-circle"></i>
+            </div>
+            <span class="qnav-lbl">Inquiries</span>
+            <span class="qnav-count">{{ inquiryCount }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

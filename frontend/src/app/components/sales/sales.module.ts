@@ -1,0 +1,17 @@
+// src/app/components/sales/sales.module.ts
+import { NgModule }     from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule }  from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { ChartModule }  from 'primeng/chart';
+import { SalesComponent } from './sales.component';
+
+@NgModule({
+  declarations: [SalesComponent],
+  imports: [
+    CommonModule, FormsModule,
+    RouterModule.forChild([{ path: '', component: SalesComponent }]),
+    ChartModule,
+  ],
+})
+export class SalesModule {}

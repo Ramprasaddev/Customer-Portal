@@ -1,0 +1,474 @@
+<!-- src/app/components/profile/profile.component.html -->
+<div class="profile-page">
+  <!-- Loading -->
+  <div class="profile-loading" *ngIf="loading">
+    <div class="loading-spinner"></div>
+    <p>Loading your profile&hellip;</p>
+  </div>
+
+  <!-- Error -->
+  <div class="profile-error" *ngIf="error && !loading">
+    <div class="error-icon-wrap">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+    </div>
+    <h3>Unable to load profile</h3>
+    <p>{{ error }}</p>
+  </div>
+
+  <ng-container *ngIf="!loading && profile">
+    <!-- ── Hero Section ─────────────────────────────────────────────── -->
+    <div class="profile-hero">
+      <!-- Cover Banner -->
+      <div class="hero-cover">
+        <div class="cover-pattern"></div>
+        <div class="cover-overlay"></div>
+      </div>
+
+      <!-- Profile Identity Block -->
+      <div class="hero-identity">
+        <div class="avatar-ring">
+          <div class="avatar">{{ initials(profile.NAME1) }}</div>
+          <div class="avatar-status"></div>
+        </div>
+        <div class="hero-info">
+          <h1>{{ profile.NAME1 }}</h1>
+          <p class="hero-sub">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="14"
+              height="14"
+            >
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+            </svg>
+            Customer &bull; SAP Portal Member
+          </p>
+          <div class="hero-badges">
+            <span class="badge badge-blue">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="11"
+                height="11"
+              >
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              ID: {{ profile.KUNNR }}
+            </span>
+            <span class="badge badge-purple">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="11"
+                height="11"
+              >
+                <rect x="2" y="7" width="20" height="14" rx="2" />
+                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+              </svg>
+              Sales Org: {{ profile.VKORG }}
+            </span>
+            <span class="badge badge-teal">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="11"
+                height="11"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path
+                  d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
+                />
+              </svg>
+              {{ countryName(profile.LAND1) }}
+            </span>
+            <span class="badge badge-green">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="11"
+                height="11"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Active Account
+            </span>
+          </div>
+        </div>
+        <a
+          href="https://www.kaartech.com/contact-us/"
+          target="_blank"
+          class="btn-contact"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="15"
+            height="15"
+          >
+            <path
+              d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
+            />
+          </svg>
+          Contact Support
+        </a>
+      </div>
+
+      <!-- Quick Stats Row -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-icon stat-icon-blue">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="16"
+              height="16"
+            >
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-label">Distribution Ch.</div>
+            <div class="stat-val">{{ profile.VTWEG || "—" }}</div>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-icon stat-icon-purple">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="16"
+              height="16"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-label">Location</div>
+            <div class="stat-val">{{ profile.ORT01 || "—" }}</div>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-icon stat-icon-amber">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="16"
+              height="16"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-label">Portal Status</div>
+            <div class="stat-val stat-active">Verified</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /profile-hero -->
+
+    <!-- ── Detail Grid ─────────────────────────────────────────────── -->
+    <div class="profile-grid">
+      <!-- Contact Information -->
+      <div class="pro-card">
+        <div class="pro-card-header">
+          <div class="card-icon-wrap" style="background: #dbeafe">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#1D4ED8"
+              stroke-width="2"
+            >
+              <path
+                d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.13 1 .38 1.98.74 2.93a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l1.15-.86a2 2 0 012.11-.45c.95.36 1.93.61 2.93.74A2 2 0 0122 16.92z"
+              />
+            </svg>
+          </div>
+          <div>
+            <h3>Contact Information</h3>
+            <p>How to reach you</p>
+          </div>
+        </div>
+        <div class="pro-card-rows">
+          <div class="pro-row">
+            <div class="pro-row-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="14"
+                height="14"
+              >
+                <path
+                  d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.13 1 .38 1.98.74 2.93a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l1.15-.86a2 2 0 012.11-.45c.95.36 1.93.61 2.93.74A2 2 0 0122 16.92z"
+                />
+              </svg>
+            </div>
+            <div class="pro-row-body">
+              <span class="pro-lbl">Phone Number</span>
+              <span class="pro-val">{{ profile.TELF1 || "—" }}</span>
+            </div>
+          </div>
+          <div class="pro-row">
+            <div class="pro-row-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="14"
+                height="14"
+              >
+                <path
+                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+            </div>
+            <div class="pro-row-body">
+              <span class="pro-lbl">Email Address</span>
+              <span class="pro-val">
+                <a
+                  *ngIf="profile.SMTP_ADDR"
+                  [href]="'mailto:' + profile.SMTP_ADDR"
+                  class="pro-link"
+                >
+                  {{ profile.SMTP_ADDR }}
+                </a>
+                <span *ngIf="!profile.SMTP_ADDR">—</span>
+              </span>
+            </div>
+          </div>
+          <div class="pro-row">
+            <div class="pro-row-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="14"
+                height="14"
+              >
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <div class="pro-row-body">
+              <span class="pro-lbl">Customer Name</span>
+              <span class="pro-val">{{ profile.NAME1 }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="pro-card">
+        <div class="pro-card-header">
+          <div class="card-icon-wrap" style="background: #d1fae5">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#059669"
+              stroke-width="2"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          </div>
+          <div>
+            <h3>Billing Address</h3>
+            <p>Registered location on file</p>
+          </div>
+        </div>
+        <div class="pro-card-rows">
+          <div class="pro-row">
+            <div class="pro-row-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="14"
+                height="14"
+              >
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </div>
+            <div class="pro-row-body">
+              <span class="pro-lbl">Street Address</span>
+              <span class="pro-val">{{ profile.STRAS || "—" }}</span>
+            </div>
+          </div>
+          <div class="pro-row">
+            <div class="pro-row-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="14"
+                height="14"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </div>
+            <div class="pro-row-body">
+              <span class="pro-lbl">City</span>
+              <span class="pro-val">{{ profile.ORT01 || "—" }}</span>
+            </div>
+          </div>
+          <div class="pro-row">
+            <div class="pro-row-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="14"
+                height="14"
+              >
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+              </svg>
+            </div>
+            <div class="pro-row-body">
+              <span class="pro-lbl">Postal Code</span>
+              <span class="pro-val">{{ profile.PSTLZ || "—" }}</span>
+            </div>
+          </div>
+          <div class="pro-row">
+            <div class="pro-row-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="14"
+                height="14"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path
+                  d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
+                />
+              </svg>
+            </div>
+            <div class="pro-row-body">
+              <span class="pro-lbl">Country</span>
+              <span class="pro-val">
+                {{ countryName(profile.LAND1) }}
+                <span class="country-code">{{ profile.LAND1 }}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kaartech Brand Card -->
+      <div class="pro-card kt-brand-card">
+        <div class="kt-brand-top">
+          <div class="kt-brand-logo">
+            <img
+              src="https://www.kaartech.com/wp-content/uploads/2025/07/updated-website-logo-01-scaled.png"
+              alt="Kaartech"
+              class="kt-brand-logo-img"
+            />
+          </div>
+          <div>
+            <div class="kt-brand-name">Kaartech Consulting</div>
+            <div class="kt-brand-tagline">SAP Gold Partner · Since 2001</div>
+          </div>
+        </div>
+        <div class="kt-brand-divider"></div>
+        <p class="kt-brand-desc">
+          For any changes to your master data, billing address, or account
+          details, please contact your dedicated Kaartech account manager or
+          raise a support ticket.
+        </p>
+        <div class="kt-brand-links">
+          <a
+            href="https://www.kaartech.com"
+            target="_blank"
+            class="kt-link-primary"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="14"
+              height="14"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path
+                d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
+              />
+            </svg>
+            kaartech.com
+          </a>
+          <a
+            href="https://www.kaartech.com/contact-us/"
+            target="_blank"
+            class="kt-link-outline"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="14"
+              height="14"
+            >
+              <path
+                d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
+              />
+            </svg>
+            Raise a Ticket
+          </a>
+        </div>
+        <!-- Background decoration -->
+        <div class="kt-deco-circle kt-deco-1"></div>
+        <div class="kt-deco-circle kt-deco-2"></div>
+      </div>
+    </div>
+    <!-- /profile-grid -->
+  </ng-container>
+</div>

@@ -1,0 +1,164 @@
+<div class="portal-shell" [class.mobile-open]="mobileOpen" [class.sidebar-pinned]="sidebarPinned">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════════════════════════ -->
+  <aside class="sidebar" *ngIf="isLoggedIn" (click)="closeMobile()">
+
+    <!-- Logo + pin button -->
+    <div class="sidebar-header">
+      <img
+        src="https://www.kaartech.com/wp-content/uploads/2025/07/updated-website-logo-01-scaled.png"
+        alt="KaarTech"
+        class="brand-logo"
+      />
+      <button
+        class="pin-btn"
+        (click)="togglePin(); $event.stopPropagation()"
+        [pTooltip]="sidebarPinned ? 'Unpin sidebar' : 'Pin sidebar open'"
+        tooltipPosition="right"
+        [class.pinned]="sidebarPinned"
+      >
+        <i class="pi pi-thumbtack"></i>
+      </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.route"
+        class="nav-item"
+        [class.active]="isActive(item.route)"
+        [pTooltip]="item.label"
+        tooltipPosition="right"
+        [tooltipDisabled]="sidebarPinned"
+        (click)="closeMobile(); $event.stopPropagation()"
+      >
+        <div class="nav-icon-wrap">
+          <i class="pi nav-icon" [ngClass]="item.icon"></i>
+          <span class="nav-badge" *ngIf="item.badge > 0">{{ item.badge }}</span>
+        </div>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    </nav>
+
+    <!-- User footer -->
+    <div class="sidebar-footer">
+      <div class="user-profile" (click)="goToProfile(); $event.stopPropagation()" pTooltip="View profile" tooltipPosition="right">
+        <div class="user-avatar">{{ userInitials }}</div>
+        <div class="user-info">
+          <span class="user-name">{{ profile?.NAME1 || 'Customer' }}</span>
+          <span class="user-role">{{ kunnr }}</span>
+        </div>
+      </div>
+      <button class="logout-btn" (click)="logout($event)" pTooltip="Sign out" tooltipPosition="right">
+        <i class="pi pi-sign-out"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mobile backdrop -->
+  <div class="sidebar-backdrop" *ngIf="isLoggedIn && mobileOpen" (click)="closeMobile()"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="main-content">
+
+    <!-- ── TOPBAR ────────────────────────────────────────────── -->
+    <header class="topbar" *ngIf="isLoggedIn">
+
+      <button class="menu-toggle" (click)="toggleMobile()" title="Menu">
+        <i class="pi pi-bars"></i>
+      </button>
+
+      <!-- Page title -->
+      <div class="topbar-title">
+        <ng-container *ngFor="let item of navItems">
+          <ng-container *ngIf="isActive(item.route)">
+            <i class="pi page-icon" [ngClass]="item.icon"></i>
+            <span class="page-label">{{ item.label }}</span>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <div class="topbar-actions">
+
+        <!-- Inline search bar -->
+        <div class="search-slide" [class.open]="showSearchBar">
+          <i class="pi pi-search search-slide-ico"></i>
+          <input
+            type="text"
+            class="search-slide-input"
+            placeholder="Search orders, invoices, deliveries…"
+            [(ngModel)]="globalSearch"
+            (keydown)="onGlobalSearch($event)"
+          />
+        </div>
+
+        <!-- Search toggle -->
+        <button class="topbar-icon-btn" (click)="toggleSearchBar()" [class.active]="showSearchBar"
+          pTooltip="Search" tooltipPosition="bottom">
+          <i class="pi pi-search"></i>
+        </button>
+
+        <ng-container *ngIf="false">
+        <div class="notif-wrap">
+          <button class="topbar-icon-btn" (click)="toggleNotifPanel()" [class.active]="showNotifPanel"
+            pTooltip="Notifications" tooltipPosition="bottom">
+            <i class="pi pi-bell"></i>
+            <span class="notif-dot" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+          </button>
+
+          <!-- Dropdown panel -->
+          <div class="notif-panel" *ngIf="showNotifPanel" (click)="$event.stopPropagation()">
+            <div class="notif-panel-head">
+              <span class="notif-panel-title">
+                Notifications
+                <span class="notif-count-badge" *ngIf="unreadCount > 0">{{ unreadCount }} new</span>
+              </span>
+              <button class="notif-mark-all" (click)="markAllRead()">Mark all read</button>
+            </div>
+            <div class="notif-list">
+              <div
+                class="notif-item"
+                *ngFor="let n of notifications"
+                [class.unread]="!n.read"
+                (click)="markRead(n)"
+              >
+                <div class="notif-ico-wrap" [ngClass]="n.iconClass">
+                  <i class="pi" [ngClass]="n.icon"></i>
+                </div>
+                <div class="notif-content">
+                  <div class="notif-title">{{ n.title }}</div>
+                  <div class="notif-body">{{ n.body }}</div>
+                  <div class="notif-time">{{ n.time }}</div>
+                </div>
+                <span class="notif-unread-dot" *ngIf="!n.read"></span>
+              </div>
+            </div>
+            <div class="notif-panel-footer">
+              <a routerLink="/dashboard" (click)="showNotifPanel = false">View all activity →</a>
+            </div>
+          </div>
+        </div>
+
+        </ng-container>
+        <ng-container *ngIf="false">
+        <!-- KaarTech link -->
+        <a href="https://www.kaartech.com" target="_blank" class="kt-link">
+          <i class="pi pi-globe"></i>
+          <span class="kt-link-text">kaartech.com</span>
+        </a>
+        </ng-container>
+      </div>
+    </header>
+
+    <!-- ── PAGE CONTENT ─────────────────────────────────────── -->
+    <div class="page-content" [class.full-page]="!isLoggedIn">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+</div>

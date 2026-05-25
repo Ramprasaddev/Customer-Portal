@@ -1,0 +1,132 @@
+<!-- src/app/components/aging/aging.component.html -->
+<div class="aging-page">
+
+  <!-- ── Page Header ── -->
+  <div class="section-header">
+    <div>
+      <h2>Payment Aging Report</h2>
+      <div class="section-sub">Outstanding receivables bucketed by overdue days — from SAP FI</div>
+    </div>
+    <button class="btn-export" (click)="exportCsv()" [disabled]="loading">
+      <i class="pi pi-download"></i> Export CSV
+    </button>
+  </div>
+
+  <!-- ── Skeleton ── -->
+  <div class="skeleton-table" *ngIf="loading">
+    <p-skeleton height="100px" styleClass="mb-2"></p-skeleton>
+    <p-skeleton height="3rem" styleClass="mb-2" *ngFor="let i of [1,2,3,4]"></p-skeleton>
+  </div>
+
+  <!-- ── Error ── -->
+  <div class="error-banner" *ngIf="error && !loading">
+    <i class="pi pi-exclamation-triangle"></i> {{ error }}
+    <button (click)="load()">Retry</button>
+  </div>
+
+  <ng-container *ngIf="!loading && !error && agingData">
+
+    <!-- ── Total Outstanding Hero ── -->
+    <div class="total-hero">
+      <div class="total-hero-inner">
+        <div class="hero-lbl">Total Outstanding</div>
+        <div class="hero-val">{{ formatAmount(totalOutstanding) }} <span class="hero-curr">{{ currency }}</span></div>
+        <div class="hero-sub">{{ agingData.aging.length }} documents &nbsp;·&nbsp; {{ bucketList.length }} buckets</div>
+      </div>
+    </div>
+
+    <!-- ── Bucket Cards ── -->
+    <div class="bucket-strip">
+      <div class="bucket-card" *ngFor="let b of bucketList">
+        <div class="bucket-top">
+          <p-tag [value]="b.label + ' days'" [severity]="b.severity" [rounded]="true"></p-tag>
+          <span class="bucket-pct">{{ b.pct }}%</span>
+        </div>
+        <div class="bucket-amt">{{ formatAmount(b.total) }}</div>
+        <div class="bucket-meta">{{ b.count }} docs &nbsp;·&nbsp; {{ b.currency }}</div>
+        <div class="bucket-bar"><div class="bucket-fill" [style.width.%]="b.pct" [attr.data-sev]="b.severity"></div></div>
+      </div>
+    </div>
+
+    <!-- ── Aging Bar Chart ── -->
+    <div class="kt-card chart-card" *ngIf="barData">
+      <div class="chart-head">
+        <span class="chart-title">Aging Bucket Distribution</span>
+        <span class="chart-sub">Outstanding value by overdue bracket</span>
+      </div>
+      <div style="height:220px">
+        <p-chart type="bar" [data]="barData" [options]="barOptions" height="220px"></p-chart>
+      </div>
+    </div>
+
+    <!-- ── Filter Bar ── -->
+    <div class="filter-bar">
+      <div class="search-input-wrap">
+        <span class="search-icon"><i class="pi pi-search"></i></span>
+        <input pInputText type="text" placeholder="Search document, bucket, currency…"
+          [(ngModel)]="search" (input)="onSearch()" />
+      </div>
+      <button class="btn-refresh" (click)="load()" pTooltip="Refresh" tooltipPosition="top">
+        <i class="pi pi-refresh"></i>
+      </button>
+    </div>
+
+    <!-- ── Details Table ── -->
+    <div class="kt-card table-card">
+      <p-table
+        [value]="filteredItems"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10,20,50]"
+        [sortField]="'AGING_DAYS'"
+        [sortOrder]="-1"
+        styleClass="p-datatable-sm p-datatable-gridlines"
+        responsiveLayout="scroll"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="VBELN">Document # <p-sortIcon field="VBELN"></p-sortIcon></th>
+            <th pSortableColumn="FKDAT" style="width:130px">Invoice Date <p-sortIcon field="FKDAT"></p-sortIcon></th>
+            <th style="width:120px">Due Date</th>
+            <th pSortableColumn="AGING_DAYS" style="width:110px">
+              Aging Days <p-sortIcon field="AGING_DAYS"></p-sortIcon>
+            </th>
+            <th style="width:120px">Bucket</th>
+            <th pSortableColumn="NETWR" style="width:150px;text-align:right">
+              Net Value <p-sortIcon field="NETWR"></p-sortIcon>
+            </th>
+            <th style="width:90px">Currency</th>
+            <th style="width:90px">Status</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td class="mono-cell">{{ item.VBELN }}</td>
+            <td>{{ formatDate(item.FKDAT) }}</td>
+            <td>{{ formatDate(item.ZFBDT) }}</td>
+            <td class="days-cell">{{ agingDays(item.AGING_DAYS) }}</td>
+            <td>
+              <p-tag [value]="item.AGING_BUCKET || '—'" [severity]="bucketSev(item.AGING_BUCKET)" [rounded]="true"></p-tag>
+            </td>
+            <td class="amount-cell">{{ formatAmount(item.NETWR) }}</td>
+            <td>{{ item.WAERK || '—' }}</td>
+            <td>
+              <p-tag [value]="paidLabel(item.RFBSK)" [severity]="paidSeverity(item.RFBSK)" [rounded]="true"></p-tag>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr><td colspan="8" class="empty-cell">
+            <div class="empty-state">
+              <i class="pi pi-check-circle" style="color:#10B981;font-size:2.5rem"></i>
+              <p>No aging records — all payments may be up to date</p>
+            </div>
+          </td></tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+  </ng-container>
+</div>

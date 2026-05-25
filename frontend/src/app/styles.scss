@@ -1,0 +1,64 @@
+/*
+ * Kaartech Customer Portal - Global Styles
+ * Official & Professional Enterprise Look
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  
+  /* Official Professional Font Stack */
+  font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  
+  background: #f8f9fc;
+  color: #1a1a2e;
+  line-height: 1.5;
+  font-feature-settings: "kern" 1, "tnum" 1;   /* Better kerning + tabular numbers */
+  
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  overscroll-behavior: none;
+}
+
+#app-root {
+  min-height: 100vh;
+}
+
+/* =============================================
+   Typography Improvements for Official Look
+============================================= */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 600;
+}
+
+h1 { font-size: 28px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+
+/* Make sure all text elements inherit professional font */
+p, span, div, button, input, select, textarea, th, td {
+  font-family: inherit;
+}
+
+/* Tabular numbers for amounts & document numbers */
+.amount,
+.doc-num,
+.row-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Import your component styles at the end */
+@import '../app/app.component.scss';

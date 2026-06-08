@@ -5,13 +5,14 @@ import { FormsModule }  from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ChartModule }  from 'primeng/chart';
 import { SalesComponent } from './sales.component';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [SalesComponent],
   imports: [
     CommonModule, FormsModule,
     RouterModule.forChild([{ path: '', component: SalesComponent }]),
-    ChartModule,
+    ChartModule, SharedModule,
   ],
 })
 export class SalesModule {}

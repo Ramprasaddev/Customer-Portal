@@ -19,6 +19,7 @@ import { DividerModule }     from 'primeng/divider';
 import { AvatarModule }      from 'primeng/avatar';
 
 import { DashboardComponent } from './dashboard.component';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -40,6 +41,7 @@ import { DashboardComponent } from './dashboard.component';
     ChipModule,
     DividerModule,
     AvatarModule,
+    SharedModule,
   ],
 })
 export class DashboardModule {}

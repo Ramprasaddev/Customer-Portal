@@ -1,13 +1,16 @@
 <!-- src/app/components/finance/finance.component.html -->
 <div class="finance-page">
-
   <!-- ── Page Header ── -->
   <div class="section-header">
     <div>
       <h2>Finance &amp; Billing</h2>
       <div class="section-sub">Credit / Debit notes and Invoice documents</div>
     </div>
-    <button class="btn-export" (click)="exportCsv(activeTab === 'creditDebit' ? 'cd' : 'inv')" [disabled]="loading">
+    <button
+      class="btn-export"
+      (click)="exportCsv(activeTab === 'creditDebit' ? 'cd' : 'inv')"
+      [disabled]="loading"
+    >
       <i class="pi pi-download"></i> Export CSV
     </button>
   </div>
@@ -38,7 +41,12 @@
     <div class="kpi-card kpi-amber">
       <div class="kpi-icon"><i class="pi pi-list"></i></div>
       <div class="kpi-body">
-        <div class="kpi-val">{{ (financeData.creditDebit.length || 0) + (financeData.invoices.length || 0) }}</div>
+        <div class="kpi-val">
+          {{
+            (financeData.creditDebit.length || 0) +
+              (financeData.invoices.length || 0)
+          }}
+        </div>
         <div class="kpi-lbl">Total Documents</div>
       </div>
     </div>
@@ -51,8 +59,13 @@
         <span class="chart-title">Document Breakdown</span>
         <span class="chart-sub">Credit vs Debit Memos</span>
       </div>
-      <div class="chart-body" style="height:220px">
-        <p-chart type="doughnut" [data]="donutData" [options]="donutOptions" height="220px"></p-chart>
+      <div class="chart-body" style="height: 220px">
+        <p-chart
+          type="doughnut"
+          [data]="donutData"
+          [options]="donutOptions"
+          height="220px"
+        ></p-chart>
       </div>
     </div>
     <div class="kt-card chart-card">
@@ -60,8 +73,13 @@
         <span class="chart-title">Top Documents by Value</span>
         <span class="chart-sub">Green = Credit &nbsp;·&nbsp; Red = Debit</span>
       </div>
-      <div class="chart-body" style="height:220px">
-        <p-chart type="bar" [data]="barData" [options]="barOptions" height="220px"></p-chart>
+      <div class="chart-body" style="height: 220px">
+        <p-chart
+          type="bar"
+          [data]="barData"
+          [options]="barOptions"
+          height="220px"
+        ></p-chart>
       </div>
     </div>
   </div>
@@ -70,8 +88,13 @@
   <div class="filter-bar">
     <div class="search-input-wrap">
       <span class="search-icon"><i class="pi pi-search"></i></span>
-      <input pInputText type="text" placeholder="Search document number, type, currency…"
-        [(ngModel)]="search" (input)="onSearch()" />
+      <input
+        pInputText
+        type="text"
+        placeholder="Search document number, type, currency…"
+        [(ngModel)]="search"
+        (input)="onSearch()"
+      />
     </div>
     <div class="date-inputs">
       <div class="date-field">
@@ -83,18 +106,31 @@
         <input type="date" [(ngModel)]="dateTo" (change)="onDateChange()" />
       </div>
     </div>
-    <button class="btn-refresh" (click)="load()" pTooltip="Refresh" tooltipPosition="top">
+    <button
+      class="btn-refresh"
+      (click)="load()"
+      pTooltip="Refresh"
+      tooltipPosition="top"
+    >
       <i class="pi pi-refresh"></i>
     </button>
   </div>
 
   <!-- ── Tabs ── -->
   <div class="tab-bar">
-    <button class="tab-btn" [class.active]="activeTab === 'creditDebit'" (click)="setTab('creditDebit')">
+    <button
+      class="tab-btn"
+      [class.active]="activeTab === 'creditDebit'"
+      (click)="setTab('creditDebit')"
+    >
       <i class="pi pi-dollar"></i> Credit / Debit Notes
       <span class="tab-count">{{ filteredCD.length }}</span>
     </button>
-    <button class="tab-btn" [class.active]="activeTab === 'invoices'" (click)="setTab('invoices')">
+    <button
+      class="tab-btn"
+      [class.active]="activeTab === 'invoices'"
+      (click)="setTab('invoices')"
+    >
       <i class="pi pi-file"></i> Invoices
       <span class="tab-count">{{ filteredInv.length }}</span>
     </button>
@@ -102,7 +138,11 @@
 
   <!-- ── Skeleton ── -->
   <div class="skeleton-table" *ngIf="loading">
-    <p-skeleton height="3rem" styleClass="mb-2" *ngFor="let i of [1,2,3,4,5]"></p-skeleton>
+    <p-skeleton
+      height="3rem"
+      styleClass="mb-2"
+      *ngFor="let i of [1, 2, 3, 4, 5]"
+    ></p-skeleton>
   </div>
 
   <!-- ── Error ── -->
@@ -112,12 +152,15 @@
   </div>
 
   <!-- ── Credit/Debit Table ── -->
-  <div class="kt-card table-card" *ngIf="!loading && !error && activeTab === 'creditDebit'">
+  <div
+    class="kt-card table-card"
+    *ngIf="!loading && !error && activeTab === 'creditDebit'"
+  >
     <p-table
       [value]="filteredCD"
       [paginator]="true"
       [rows]="10"
-      [rowsPerPageOptions]="[10,20,50]"
+      [rowsPerPageOptions]="[10, 20, 50]"
       [sortField]="'FKDAT'"
       [sortOrder]="-1"
       styleClass="p-datatable-sm p-datatable-gridlines"
@@ -125,41 +168,57 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="VBELN">Document # <p-sortIcon field="VBELN"></p-sortIcon></th>
-          <th pSortableColumn="FKDAT" style="width:130px">Date <p-sortIcon field="FKDAT"></p-sortIcon></th>
-          <th style="width:140px">Type</th>
-          <th pSortableColumn="NETWR" style="width:150px;text-align:right">
+          <th pSortableColumn="VBELN">
+            Document # <p-sortIcon field="VBELN"></p-sortIcon>
+          </th>
+          <th pSortableColumn="FKDAT" style="width: 130px">
+            Date <p-sortIcon field="FKDAT"></p-sortIcon>
+          </th>
+          <th style="width: 140px">Type</th>
+          <th pSortableColumn="NETWR" style="width: 150px; text-align: right">
             Net Value <p-sortIcon field="NETWR"></p-sortIcon>
           </th>
-          <th style="width:90px">Currency</th>
+          <th style="width: 90px">Currency</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-item>
         <tr>
-          <td class="mono-cell">{{ item.VBELN }}</td>
+          <td class="mono-cell">{{ item.VBELN | stripZeros }}</td>
           <td>{{ formatDate(item.FKDAT) }}</td>
           <td>
-            <p-tag [value]="docTypeLabel(item.FKART)" [severity]="severity(item.FKART)" [rounded]="true"></p-tag>
+            <p-tag
+              [value]="docTypeLabel(item.FKART)"
+              [severity]="severity(item.FKART)"
+              [rounded]="true"
+            ></p-tag>
           </td>
           <td class="amount-cell">{{ formatAmount(item.NETWR) }}</td>
-          <td>{{ item.WAERK || '—' }}</td>
+          <td>{{ item.WAERK || "—" }}</td>
         </tr>
       </ng-template>
       <ng-template pTemplate="emptymessage">
-        <tr><td colspan="5" class="empty-cell">
-          <div class="empty-state"><i class="pi pi-inbox"></i><p>No credit/debit documents found</p></div>
-        </td></tr>
+        <tr>
+          <td colspan="5" class="empty-cell">
+            <div class="empty-state">
+              <i class="pi pi-inbox"></i>
+              <p>No credit/debit documents found</p>
+            </div>
+          </td>
+        </tr>
       </ng-template>
     </p-table>
   </div>
 
   <!-- ── Invoices Table ── -->
-  <div class="kt-card table-card" *ngIf="!loading && !error && activeTab === 'invoices'">
+  <div
+    class="kt-card table-card"
+    *ngIf="!loading && !error && activeTab === 'invoices'"
+  >
     <p-table
       [value]="filteredInv"
       [paginator]="true"
       [rows]="10"
-      [rowsPerPageOptions]="[10,20,50]"
+      [rowsPerPageOptions]="[10, 20, 50]"
       [sortField]="'FKDAT'"
       [sortOrder]="-1"
       styleClass="p-datatable-sm p-datatable-gridlines"
@@ -167,32 +226,44 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="VBELN">Invoice # <p-sortIcon field="VBELN"></p-sortIcon></th>
-          <th pSortableColumn="FKDAT" style="width:130px">Date <p-sortIcon field="FKDAT"></p-sortIcon></th>
-          <th style="width:110px">Type</th>
-          <th pSortableColumn="NETWR" style="width:150px;text-align:right">
+          <th pSortableColumn="VBELN">
+            Invoice # <p-sortIcon field="VBELN"></p-sortIcon>
+          </th>
+          <th pSortableColumn="FKDAT" style="width: 130px">
+            Date <p-sortIcon field="FKDAT"></p-sortIcon>
+          </th>
+          <th style="width: 110px">Type</th>
+          <th pSortableColumn="NETWR" style="width: 150px; text-align: right">
             Net Value <p-sortIcon field="NETWR"></p-sortIcon>
           </th>
-          <th style="width:90px">Currency</th>
+          <th style="width: 90px">Currency</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-item>
         <tr>
-          <td class="mono-cell">{{ item.VBELN }}</td>
+          <td class="mono-cell">{{ item.VBELN | stripZeros }}</td>
           <td>{{ formatDate(item.FKDAT) }}</td>
           <td>
-            <p-tag [value]="docTypeLabel(item.FKART)" [severity]="severity(item.FKART)" [rounded]="true"></p-tag>
+            <p-tag
+              [value]="docTypeLabel(item.FKART)"
+              [severity]="severity(item.FKART)"
+              [rounded]="true"
+            ></p-tag>
           </td>
           <td class="amount-cell">{{ formatAmount(item.NETWR) }}</td>
-          <td>{{ item.WAERK || '—' }}</td>
+          <td>{{ item.WAERK || "—" }}</td>
         </tr>
       </ng-template>
       <ng-template pTemplate="emptymessage">
-        <tr><td colspan="5" class="empty-cell">
-          <div class="empty-state"><i class="pi pi-file"></i><p>No invoices found</p></div>
-        </td></tr>
+        <tr>
+          <td colspan="5" class="empty-cell">
+            <div class="empty-state">
+              <i class="pi pi-file"></i>
+              <p>No invoices found</p>
+            </div>
+          </td>
+        </tr>
       </ng-template>
     </p-table>
   </div>
-
 </div>

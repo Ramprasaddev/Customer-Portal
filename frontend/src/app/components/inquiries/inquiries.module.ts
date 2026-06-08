@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { InquiriesComponent } from './inquiries.component';
+import { SharedModule } from '../../shared/shared.module';
 
 import { TableModule }    from 'primeng/table';
 import { TagModule }      from 'primeng/tag';
@@ -18,7 +19,7 @@ import { ChartModule }    from 'primeng/chart';
     CommonModule,
     FormsModule,
     RouterModule.forChild([{ path: '', component: InquiriesComponent }]),
-    TableModule, TagModule, ButtonModule, DialogModule, TooltipModule, SkeletonModule, ChartModule,
+    TableModule, TagModule, ButtonModule, DialogModule, TooltipModule, SkeletonModule, ChartModule, SharedModule,
   ],
 })
 export class InquiriesModule {}

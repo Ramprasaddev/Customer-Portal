@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
+import { stripLeadingZeros } from '../../utils/string-utils';
 
 @Component({
   selector: 'app-inquiries',
@@ -162,8 +163,16 @@ export class InquiriesComponent implements OnInit {
   exportCsv(): void {
     const headers = ['Inquiry #', 'Product', 'Material', 'Qty', 'Unit', 'Value', 'Currency', 'Date', 'Valid From', 'Valid To'];
     const rows = this.filtered.map(i => [
-      i.VBELN, i.MAKTX || '', i.MATNR || '', i.KWMENG || '', i.VRKME || '',
-      i.NETWR || '', i.WAERK || '', i.ERDAT || '', i.ANGDT || '', i.BNDDT || ''
+      stripLeadingZeros(i.VBELN),
+      i.MAKTX || '',
+      stripLeadingZeros(i.MATNR),
+      i.KWMENG || '',
+      i.VRKME || '',
+      i.NETWR || '',
+      i.WAERK || '',
+      i.ERDAT || '',
+      i.ANGDT || '',
+      i.BNDDT || ''
     ]);
     const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
     const a   = document.createElement('a');

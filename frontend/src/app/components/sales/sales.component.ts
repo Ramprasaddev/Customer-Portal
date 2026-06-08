@@ -19,6 +19,13 @@ export class SalesComponent implements OnInit {
   dateTo   = new Date().toISOString().split('T')[0];
   search   = '';
 
+  // Per-column filters
+  cf: Record<string, string> = {};
+
+  // Sorting
+  sortField     = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
   // KPIs
   kpiTotal      = 0;
   kpiCompleted  = 0;
@@ -65,7 +72,7 @@ export class SalesComponent implements OnInit {
   buildChart(): void {
     const labels = ['Completed', 'In Process', 'Partial'];
     const counts = [this.kpiCompleted, this.kpiInProcess, this.kpiPartial];
-    const colors = ['#10B981', '#3B82F6', '#F59E0B'];
+    const colors = ['#10B981', '#3B82F6', '#F59E0B'];  // bright green, blue, amber
     const borders = ['#059669', '#1D4ED8', '#D97706'];
 
     this.chartData = {
@@ -73,7 +80,7 @@ export class SalesComponent implements OnInit {
       datasets: [{
         label: 'Orders',
         data: counts,
-        backgroundColor: colors.map(c => c + '26'),   // 15% opacity fill
+        backgroundColor: colors,
         borderColor: borders,
         borderWidth: 2,
         borderRadius: 8,
@@ -120,10 +127,50 @@ export class SalesComponent implements OnInit {
 
   applyFilter(): void {
     const q = this.search.toLowerCase();
-    this.filteredOrders = q
+    let result = q
       ? this.orders.filter(o => Object.values(o).some(v => String(v).toLowerCase().includes(q)))
       : [...this.orders];
+
+    // Apply per-column filters
+    Object.entries(this.cf).forEach(([field, val]) => {
+      if (val?.trim()) {
+        const fv = val.trim().toLowerCase();
+        result = result.filter(o => String(o[field as keyof SalesOrder] ?? '').toLowerCase().includes(fv));
+      }
+    });
+
+    this.filteredOrders = result;
+    this.applySort();
     this.currentPage = 1;
+  }
+
+  applySort(): void {
+    if (!this.sortField) {
+      return;
+    }
+
+    const direction = this.sortDirection === 'asc' ? 1 : -1;
+    this.filteredOrders.sort((a, b) => {
+      const left = String(a[this.sortField as keyof SalesOrder] ?? '').toLowerCase();
+      const right = String(b[this.sortField as keyof SalesOrder] ?? '').toLowerCase();
+      const leftNum = parseFloat(left);
+      const rightNum = parseFloat(right);
+
+      if (!Number.isNaN(leftNum) && !Number.isNaN(rightNum)) {
+        return (leftNum - rightNum) * direction;
+      }
+      return left.localeCompare(right) * direction;
+    });
+  }
+
+  sortBy(field: string): void {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+    this.applySort();
   }
 
   // ── Pagination computed properties ────────────────────────────────────────
@@ -162,6 +209,8 @@ export class SalesComponent implements OnInit {
 
   // ── Events ────────────────────────────────────────────────────────────────
   onSearch(): void { this.applyFilter(); }
+  onColFilter(): void { this.applyFilter(); }
+  onClearFilters(): void { this.cf = {}; this.search = ''; this.load(); }
   onDateChange(): void { this.load(); }
 
   viewOrder(order: SalesOrder): void { this.selectedOrder = order; }

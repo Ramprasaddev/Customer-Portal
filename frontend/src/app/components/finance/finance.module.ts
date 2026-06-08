@@ -4,6 +4,7 @@ import { CommonModule }   from '@angular/common';
 import { FormsModule }    from '@angular/forms';
 import { RouterModule }   from '@angular/router';
 import { FinanceComponent } from './finance.component';
+import { SharedModule } from '../../shared/shared.module';
 
 // PrimeNG
 import { TableModule }    from 'primeng/table';
@@ -27,6 +28,7 @@ import { InputTextModule }from 'primeng/inputtext';
     TooltipModule,
     SkeletonModule,
     InputTextModule,
+    SharedModule,
   ],
 })
 export class FinanceModule {}

@@ -1,36 +1,63 @@
 <div class="invoice-page">
-
   <!-- Page Header -->
   <div class="inv-page-header">
     <div class="header-left">
       <div class="header-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/>
-          <line x1="16" y1="17" x2="8" y2="17"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
         </svg>
       </div>
       <div>
         <h2>Customer Invoices</h2>
-        <p class="page-sub"> billing documents </p>
+        <p class="page-sub">billing documents</p>
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn-export" (click)="exportCsv()" [disabled]="loadingList || !invoiceList.length">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
+      <button
+        class="btn-export"
+        (click)="exportCsv()"
+        [disabled]="loadingList || !invoiceList.length"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="14"
+          height="14"
+        >
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
         </svg>
         Export CSV
       </button>
-      <button class="btn-refresh" (click)="loadInvoiceList()" [disabled]="loadingList"
-              pTooltip="Refresh" tooltipPosition="top">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-             width="15" height="15" [class.spinning]="loadingList">
-          <polyline points="23 4 23 10 17 10"/>
-          <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+      <button
+        class="btn-refresh"
+        (click)="loadInvoiceList()"
+        [disabled]="loadingList"
+        pTooltip="Refresh"
+        tooltipPosition="top"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="15"
+          height="15"
+          [class.spinning]="loadingList"
+        >
+          <polyline points="23 4 23 10 17 10" />
+          <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" />
         </svg>
       </button>
     </div>
@@ -40,9 +67,14 @@
   <div class="kpi-strip" *ngIf="!loadingList && !errorList">
     <div class="kpi-card kpi-blue">
       <div class="kpi-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
         </svg>
       </div>
       <div class="kpi-body">
@@ -53,9 +85,14 @@
     </div>
     <div class="kpi-card kpi-green">
       <div class="kpi-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="1" x2="12" y2="23"/>
-          <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="12" y1="1" x2="12" y2="23" />
+          <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
         </svg>
       </div>
       <div class="kpi-body">
@@ -66,8 +103,14 @@
     </div>
     <div class="kpi-card kpi-indigo">
       <div class="kpi-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
       </div>
       <div class="kpi-body">
@@ -78,11 +121,16 @@
     </div>
     <div class="kpi-card kpi-amber">
       <div class="kpi-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-          <line x1="16" y1="2" x2="16" y2="6"/>
-          <line x1="8" y1="2" x2="8" y2="6"/>
-          <line x1="3" y1="10" x2="21" y2="10"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
         </svg>
       </div>
       <div class="kpi-body">
@@ -95,10 +143,17 @@
 
   <!-- PDF error toast -->
   <div class="pdf-error-bar" *ngIf="pdfError">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-      <circle cx="12" cy="12" r="10"/>
-      <line x1="12" y1="8" x2="12" y2="12"/>
-      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      width="16"
+      height="16"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
     </svg>
     {{ pdfError }}
     <button (click)="pdfError = null">✕</button>
@@ -107,36 +162,60 @@
   <!-- Search Bar -->
   <div class="filter-bar">
     <div class="search-wrap">
-      <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      <svg
+        class="search-ico"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
       </svg>
-      <input type="text" class="search-input"
-             placeholder="Search by invoice #, date, amount, currency…"
-             [(ngModel)]="search"/>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search by invoice #, date, amount, currency…"
+        [(ngModel)]="search"
+      />
       <button class="search-clear" *ngIf="search" (click)="search = ''">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="14"
+          height="14"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
       </button>
     </div>
     <div class="filter-info" *ngIf="search">
-      Showing <strong>{{ filteredInvoices.length }}</strong> of {{ invoiceList.length }} invoices
+      Showing <strong>{{ filteredInvoices.length }}</strong> of
+      {{ invoiceList.length }} invoices
     </div>
   </div>
 
   <!-- Skeleton -->
   <div class="skeleton-wrap" *ngIf="loadingList">
     <div class="skeleton-header"></div>
-    <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5,6]"></div>
+    <div class="skeleton-row" *ngFor="let i of [1, 2, 3, 4, 5, 6]"></div>
   </div>
 
   <!-- Error -->
   <div class="error-banner" *ngIf="errorList && !loadingList">
     <div class="error-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="12" y1="8" x2="12" y2="12"/>
-        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
       </svg>
     </div>
     <div class="error-body">
@@ -148,38 +227,58 @@
 
   <!-- Invoice Table -->
   <div class="table-card" *ngIf="!loadingList && !errorList">
-
     <div class="empty-state" *ngIf="!filteredInvoices.length">
       <div class="empty-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/>
-          <line x1="16" y1="17" x2="8" y2="17"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
         </svg>
       </div>
       <h3>No invoices found</h3>
-      <p>{{ search ? 'Try a different search term' : 'No billing documents available for your account' }}</p>
+      <p>
+        {{
+          search
+            ? "Try a different search term"
+            : "No billing documents available for your account"
+        }}
+      </p>
     </div>
 
-    <p-table *ngIf="filteredInvoices.length"
-             [value]="filteredInvoices"
-             [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 50]"
-             [sortField]="'FKDAT'" [sortOrder]="-1"
-             styleClass="p-datatable-sm p-datatable-gridlines inv-table"
-             responsiveLayout="scroll">
-
+    <p-table
+      *ngIf="filteredInvoices.length"
+      [value]="filteredInvoices"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 50]"
+      [sortField]="'FKDAT'"
+      [sortOrder]="-1"
+      styleClass="p-datatable-sm p-datatable-gridlines inv-table"
+      responsiveLayout="scroll"
+    >
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="VBELN" style="width:150px">Invoice # <p-sortIcon field="VBELN"/></th>
-          <th pSortableColumn="FKDAT" style="width:120px">Date <p-sortIcon field="FKDAT"/></th>
-          <th pSortableColumn="NETWR" style="width:130px;text-align:right">Amount <p-sortIcon field="NETWR"/></th>
-          <th style="width:85px">Currency</th>
-          <th style="width:100px">Sales Org</th>
-          <th style="width:100px">Distribution</th>
+          <th pSortableColumn="VBELN" style="width: 150px">
+            Invoice # <p-sortIcon field="VBELN" />
+          </th>
+          <th pSortableColumn="FKDAT" style="width: 120px">
+            Date <p-sortIcon field="FKDAT" />
+          </th>
+          <th pSortableColumn="NETWR" style="width: 130px; text-align: right">
+            Amount <p-sortIcon field="NETWR" />
+          </th>
+          <th style="width: 85px">Currency</th>
+          <th style="width: 100px">Sales Org</th>
+          <th style="width: 100px">Distribution</th>
           <!-- Two PDF action columns -->
-          <th style="width:120px;text-align:center">Preview PDF</th>
-          <th style="width:120px;text-align:center">Download PDF</th>
+          <th style="width: 120px; text-align: center">Preview PDF</th>
+          <th style="width: 120px; text-align: center">Download PDF</th>
         </tr>
       </ng-template>
 
@@ -188,38 +287,61 @@
           <td>
             <div class="inv-num-cell">
               <span class="inv-dot"></span>
-              <span class="inv-num-text">{{ inv.VBELN }}</span>
+              <span class="inv-num-text">{{ inv.VBELN | stripZeros }}</span>
             </div>
           </td>
           <td>
             <div class="date-cell">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                <rect x="3" y="4" width="18" height="18" rx="2"/>
-                <line x1="16" y1="2" x2="16" y2="6"/>
-                <line x1="8" y1="2" x2="8" y2="6"/>
-                <line x1="3" y1="10" x2="21" y2="10"/>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="12"
+                height="12"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
               {{ formatDate(inv.FKDAT) }}
             </div>
           </td>
-          <td class="amount-cell"><span class="amount-value">{{ formatAmount(inv.NETWR) }}</span></td>
-          <td><span class="currency-badge">{{ inv.WAERK || '—' }}</span></td>
-          <td><span class="org-badge">{{ inv.VKORG || '—' }}</span></td>
-          <td class="dist-cell">{{ inv.VTWEG || '—' }}</td>
+          <td class="amount-cell">
+            <span class="amount-value">{{ formatAmount(inv.NETWR) }}</span>
+          </td>
+          <td>
+            <span class="currency-badge">{{ inv.WAERK || "—" }}</span>
+          </td>
+          <td>
+            <span class="org-badge">{{ inv.VKORG || "—" }}</span>
+          </td>
+          <td class="dist-cell">{{ inv.VTWEG || "—" }}</td>
 
           <!-- Preview PDF button -->
           <td class="action-cell">
-            <button class="btn-pdf-preview"
-                    (click)="openPdf(inv, 'preview')"
-                    [disabled]="pdfLoading === inv.VBELN"
-                    pTooltip="Preview invoice PDF" tooltipPosition="top">
+            <button
+              class="btn-pdf-preview"
+              (click)="openPdf(inv, 'preview')"
+              [disabled]="pdfLoading === inv.VBELN"
+              pTooltip="Preview invoice PDF"
+              tooltipPosition="top"
+            >
               <ng-container *ngIf="pdfLoading === inv.VBELN; else previewIcon">
                 <span class="btn-spinner"></span>
               </ng-container>
               <ng-template #previewIcon>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                  <circle cx="12" cy="12" r="3"/>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  width="13"
+                  height="13"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
                 </svg>
               </ng-template>
               Preview
@@ -228,18 +350,28 @@
 
           <!-- Download PDF button -->
           <td class="action-cell">
-            <button class="btn-pdf-download"
-                    (click)="openPdf(inv, 'download')"
-                    [disabled]="pdfLoading === inv.VBELN"
-                    pTooltip="Download invoice PDF" tooltipPosition="top">
+            <button
+              class="btn-pdf-download"
+              (click)="openPdf(inv, 'download')"
+              [disabled]="pdfLoading === inv.VBELN"
+              pTooltip="Download invoice PDF"
+              tooltipPosition="top"
+            >
               <ng-container *ngIf="pdfLoading === inv.VBELN; else downloadIcon">
                 <span class="btn-spinner"></span>
               </ng-container>
               <ng-template #downloadIcon>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                  <polyline points="7 10 12 15 17 10"/>
-                  <line x1="12" y1="15" x2="12" y2="3"/>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  width="13"
+                  height="13"
+                >
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
               </ng-template>
               Download
@@ -250,12 +382,16 @@
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="8" style="padding:40px;text-align:center;color:#9ca3af">No records found</td>
+          <td
+            colspan="8"
+            style="padding: 40px; text-align: center; color: #9ca3af"
+          >
+            No records found
+          </td>
         </tr>
       </ng-template>
     </p-table>
   </div>
-
 
   <!-- ══════════════════════════════
        PDF PREVIEW MODAL
@@ -268,22 +404,36 @@
     [resizable]="false"
     [style]="{ width: '92vw', maxWidth: '1100px', height: '90vh' }"
     styleClass="pdf-modal"
-    (onHide)="closePdfModal()">
-
+    (onHide)="closePdfModal()"
+  >
     <ng-template pTemplate="header">
       <div class="pdf-modal-header">
         <div class="pdf-modal-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="18"
+            height="18"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
           </svg>
           Invoice PDF — {{ modalVbeln }}
         </div>
         <button class="btn-modal-download" (click)="downloadFromModal()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="14"
+            height="14"
+          >
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
           Download
         </button>
@@ -291,9 +441,12 @@
     </ng-template>
 
     <div class="pdf-viewer-wrap">
-      <embed *ngIf="pdfUrl" [src]="pdfUrl" class="pdf-embed" type="application/pdf"/>
+      <embed
+        *ngIf="pdfUrl"
+        [src]="pdfUrl"
+        class="pdf-embed"
+        type="application/pdf"
+      />
     </div>
-
   </p-dialog>
-
 </div>

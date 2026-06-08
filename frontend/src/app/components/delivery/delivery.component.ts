@@ -19,6 +19,9 @@ export class DeliveryComponent implements OnInit {
   dateTo   = new Date().toISOString().split('T')[0];
   search   = '';
 
+  sortField     = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
   kpiCompleted  = 0;
   kpiInProgress = 0;
   kpiPartial    = 0;
@@ -111,7 +114,37 @@ export class DeliveryComponent implements OnInit {
     this.filteredDeliveries = q
       ? this.deliveries.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q)))
       : [...this.deliveries];
+    this.applySort();
     this.currentPage = 1;
+  }
+
+  applySort(): void {
+    if (!this.sortField) {
+      return;
+    }
+
+    const direction = this.sortDirection === 'asc' ? 1 : -1;
+    this.filteredDeliveries.sort((a, b) => {
+      const left = String(a[this.sortField as keyof Delivery] ?? '').toLowerCase();
+      const right = String(b[this.sortField as keyof Delivery] ?? '').toLowerCase();
+      const leftNum = parseFloat(left);
+      const rightNum = parseFloat(right);
+
+      if (!Number.isNaN(leftNum) && !Number.isNaN(rightNum)) {
+        return (leftNum - rightNum) * direction;
+      }
+      return left.localeCompare(right) * direction;
+    });
+  }
+
+  sortBy(field: string): void {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+    this.applySort();
   }
 
   // ── Pagination ────────────────────────────────────────────────────────────

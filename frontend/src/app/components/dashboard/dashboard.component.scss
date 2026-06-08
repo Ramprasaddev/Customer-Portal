@@ -62,20 +62,40 @@ $font  : 'Segoe UI', system-ui, -apple-system, sans-serif;
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
 
 /* ── KPI Grid ───────────────────────────────────────────────────── */
-.kpi-grid {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
-  @media (max-width: 1280px) { grid-template-columns: repeat(3, 1fr); }
-  @media (max-width: 768px)  { grid-template-columns: repeat(2, 1fr); }
+/* Primary row: 4 cards per row on desktop, 2 on tablet, 1 on mobile */
+.kpi-grid.kpi-grid--primary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  align-items: stretch;
+  @media (max-width: 1024px) { grid-template-columns: repeat(2, 1fr); }
   @media (max-width: 480px)  { grid-template-columns: 1fr; }
 }
 
+/* Secondary row: 2 cards per row, alert card sits alongside a secondary KPI */
+.kpi-grid.kpi-grid--secondary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  align-items: stretch;
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+/* Fallback small-grid used elsewhere */
+.kpi-grid { display: block; }
+
 .kpi-card {
   background: #fff; border: 1px solid $border; border-radius: 14px;
-  padding: 16px 16px; display: flex; align-items: center; gap: 12px;
+  padding: 16px; display: flex; align-items: center; gap: 12px;
   cursor: pointer; transition: transform .18s, box-shadow .18s, border-color .18s;
   box-shadow: 0 1px 4px rgba(0,0,0,.05);
-  &:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.1); border-color: #CBD5E1; }
+  min-height: 96px;
+  &:hover { transform: translateY(-4px); box-shadow: 0 10px 32px rgba(0,0,0,.09); border-color: #E6EEF8; }
   &--warn { border-color: #FCA5A5; background: #FFFAFA; }
+  &--alert {
+    border-left: 4px solid #DC2626; background: #FFF5F5;
+    box-shadow: 0 6px 30px rgba(220,34,34,.06);
+  }
 }
 
 .kpi-icon {
@@ -100,6 +120,20 @@ $font  : 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 .kpi-arrow { font-size: 10px; color: #CBD5E1; flex-shrink: 0; transition: color .15s; }
 .kpi-card:hover .kpi-arrow { color: $red; }
+
+/* Action badge for alert card */
+.action-badge {
+  display: inline-block; margin-left: 10px; padding: 4px 8px; border-radius: 12px;
+  background: #DC2626; color: #fff; font-size: 11px; font-weight: 700; text-transform: uppercase;
+}
+
+/* Trend indicators */
+.kpi-trend { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; flex-shrink: 0; color: $muted; }
+.kpi-trend--up { color: #10B981; }
+.kpi-trend--down { color: #F59E0B; }
+
+/* Slightly larger alert card on smaller grids — ensures visual priority */
+.kpi-card.kpi-card--alert { padding: 20px; }
 
 /* ── Notifications ──────────────────────────────────────────────── */
 .notif-section { }

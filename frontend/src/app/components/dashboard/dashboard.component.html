@@ -55,46 +55,75 @@
     </div>
 
     <!-- ══════════════════════════════════════════════════════
-         2. KPI STRIP  (6 cards — all clickable)
+         2. KPI STRIP  (primary row: 4 KPIs; secondary row: inquiries + overdue)
     ══════════════════════════════════════════════════════ -->
-    <div class="kpi-grid">
-      <!-- Deliveries -->
-      <div class="kpi-card" (click)="navigate('/delivery')">
-        <div class="kpi-icon" style="background: #d1fae5; color: #059669">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-            <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3"/>
-            <rect x="9" y="11" width="14" height="10" rx="1"/>
-          </svg>
-        </div>
-        <div class="kpi-body">
-          <div class="kpi-val" style="color: #059669">{{ totalDeliveries }}</div>
-          <div class="kpi-lbl">Total Deliveries</div>
-          <div class="kpi-sub">{{ completedDeliveries }} completed</div>
-        </div>
-        <i class="pi pi-chevron-right kpi-arrow"></i>
-      </div>
 
+    <!-- Primary KPIs: business process flow (Sales Orders → Deliveries → Invoices → Credit Notes) -->
+    <div class="kpi-grid kpi-grid--primary">
       <!-- Sales Orders -->
       <div class="kpi-card" (click)="navigate('/sales')">
         <div class="kpi-icon" style="background: #ede9fe; color: #7c3aed">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 01-8 0"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="20"
+            height="20"
+          >
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 01-8 0" />
           </svg>
         </div>
         <div class="kpi-body">
-          <div class="kpi-val" style="color: #7c3aed">{{ totalSalesOrders }}</div>
+          <div class="kpi-val" style="color: #7c3aed">
+            {{ totalSalesOrders }}
+          </div>
           <div class="kpi-lbl">Sales Orders</div>
           <div class="kpi-sub">
             <span class="so-dot so-dot--green"></span>{{ completedSalesOrders }}
-            <span class="so-dot so-dot--blue" style="margin-left:6px"></span>{{ inProcessSalesOrders }}
-            <span class="so-dot so-dot--amber" style="margin-left:6px"></span>{{ partialSalesOrders }}
+            <span class="so-dot so-dot--blue" style="margin-left: 6px"></span
+            >{{ inProcessSalesOrders }}
+            <span class="so-dot so-dot--amber" style="margin-left: 6px"></span
+            >{{ partialSalesOrders }}
           </div>
+        </div>
+        <div class="kpi-trend kpi-trend--up">
+          <i class="pi pi-arrow-up"></i>
         </div>
         <i class="pi pi-chevron-right kpi-arrow"></i>
       </div>
 
+      <!-- Deliveries -->
+      <div class="kpi-card" (click)="navigate('/delivery')">
+        <div class="kpi-icon" style="background: #d1fae5; color: #059669">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="20"
+            height="20"
+          >
+            <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3" />
+            <rect x="9" y="11" width="14" height="10" rx="1" />
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color: #059669">
+            {{ totalDeliveries }}
+          </div>
+          <div class="kpi-lbl">Deliveries</div>
+          <div class="kpi-sub">{{ completedDeliveries }} completed</div>
+        </div>
+        <div class="kpi-trend kpi-trend--up">
+          <i class="pi pi-arrow-up"></i>
+        </div>
+        <i class="pi pi-chevron-right kpi-arrow"></i>
+      </div>
+
+      <!-- Invoices -->
       <div class="kpi-card" (click)="navigate('/invoice')">
         <div class="kpi-icon" style="background: #dbeafe; color: #1d4ed8">
           <svg
@@ -116,36 +145,13 @@
             {{ revenueCurrency }} {{ fmt(totalRevenue) }}
           </div>
         </div>
-        <i class="pi pi-chevron-right kpi-arrow"></i>
-      </div>
-
-      <div
-        class="kpi-card kpi-card--warn"
-        (click)="navigate('/sales')"
-        *ngIf="openOrders > 0"
-      >
-        <div class="kpi-icon" style="background: #fee2e2; color: #dc2626">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            width="20"
-            height="20"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
-        </div>
-        <div class="kpi-body">
-          <div class="kpi-val" style="color: #dc2626">{{ openOrders }}</div>
-          <div class="kpi-lbl">Open Orders</div>
-          <div class="kpi-sub kpi-sub--warn">Needs attention</div>
+        <div class="kpi-trend kpi-trend--up">
+          <i class="pi pi-arrow-up"></i>
         </div>
         <i class="pi pi-chevron-right kpi-arrow"></i>
       </div>
 
+      <!-- Credit Notes -->
       <div class="kpi-card" (click)="navigate('/finance')">
         <div class="kpi-icon" style="background: #d1fae5; color: #059669">
           <svg
@@ -169,46 +175,15 @@
             {{ debitNoteCount }} debit note{{ debitNoteCount !== 1 ? "s" : "" }}
           </div>
         </div>
-        <i class="pi pi-chevron-right kpi-arrow"></i>
-      </div>
-
-      <div
-        class="kpi-card"
-        (click)="navigate('/aging')"
-        [class.kpi-card--warn]="overdueCount > 0"
-      >
-        <div
-          class="kpi-icon"
-          [style.background]="overdueCount > 0 ? '#FEE2E2' : '#FEF3C7'"
-          [style.color]="overdueCount > 0 ? '#DC2626' : '#D97706'"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            width="20"
-            height="20"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12 6 12 12 16 14" />
-          </svg>
-        </div>
-        <div class="kpi-body">
-          <div
-            class="kpi-val"
-            [style.color]="overdueCount > 0 ? '#DC2626' : '#D97706'"
-          >
-            {{ overdueCount }}
-          </div>
-          <div class="kpi-lbl">90+ Day Overdue</div>
-          <div class="kpi-sub" [class.kpi-sub--warn]="overdueCount > 0">
-            {{ overdueCount > 0 ? "Action required" : "Clear ✓" }}
-          </div>
+        <div class="kpi-trend kpi-trend--down">
+          <i class="pi pi-arrow-down"></i>
         </div>
         <i class="pi pi-chevron-right kpi-arrow"></i>
       </div>
+    </div>
 
+    <!-- Secondary KPIs: Inquiries + 90+ Day Overdue (alert) -->
+    <div class="kpi-grid kpi-grid--secondary">
       <div class="kpi-card" (click)="navigate('/inquiries')">
         <div class="kpi-icon" style="background: #ede9fe; color: #7c3aed">
           <svg
@@ -228,6 +203,21 @@
           <div class="kpi-val" style="color: #7c3aed">{{ inquiryCount }}</div>
           <div class="kpi-lbl">Inquiries</div>
           <div class="kpi-sub">Sales inquiries</div>
+        </div>
+        <i class="pi pi-chevron-right kpi-arrow"></i>
+      </div>
+
+      <!-- 90+ Day Overdue — high-priority alert card -->
+      <div class="kpi-card kpi-card--alert" (click)="navigate('/aging')">
+        <div class="kpi-icon" style="background: #fee2e2; color: #dc2626">
+          <i class="pi pi-exclamation-triangle" style="font-size: 18px"></i>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-val" style="color: #dc2626">{{ overdueCount }}</div>
+          <div class="kpi-lbl">
+            90+ Day Overdue <span class="action-badge">Action Required</span>
+          </div>
+          <div class="kpi-sub kpi-sub--warn">Immediate attention required</div>
         </div>
         <i class="pi pi-chevron-right kpi-arrow"></i>
       </div>
@@ -366,7 +356,7 @@
               [style.background]="deliveryColor(d.GBSTA)"
             ></div>
             <div class="recent-info">
-              <span class="recent-id">{{ d.VBELN }}</span>
+              <span class="recent-id">{{ d.VBELN | stripZeros }}</span>
               <span class="recent-date">{{ formatDate(d.ERDAT) }}</span>
             </div>
             <div class="recent-type">{{ deliveryTypeName(d.LFART) }}</div>
@@ -418,16 +408,28 @@
               <i class="pi pi-wallet"></i>
             </div>
             <span class="qnav-lbl">Finance</span>
-            <span class="qnav-count">{{ creditNoteCount + debitNoteCount }}</span>
+            <span class="qnav-count">{{
+              creditNoteCount + debitNoteCount
+            }}</span>
           </a>
-          <a routerLink="/aging" class="qnav-item" [class.qnav-item--alert]="overdueCount > 0">
-            <div class="qnav-icon"
+          <a
+            routerLink="/aging"
+            class="qnav-item"
+            [class.qnav-item--alert]="overdueCount > 0"
+          >
+            <div
+              class="qnav-icon"
               [style.background]="overdueCount > 0 ? '#FEE2E2' : '#FFEDD5'"
-              [style.color]="overdueCount > 0 ? '#DC2626' : '#EA580C'">
+              [style.color]="overdueCount > 0 ? '#DC2626' : '#EA580C'"
+            >
               <i class="pi pi-clock"></i>
             </div>
             <span class="qnav-lbl">Aging</span>
-            <span class="qnav-count" [style.color]="overdueCount > 0 ? '#DC2626' : ''">{{ overdueCount }}</span>
+            <span
+              class="qnav-count"
+              [style.color]="overdueCount > 0 ? '#DC2626' : ''"
+              >{{ overdueCount }}</span
+            >
           </a>
           <a routerLink="/inquiries" class="qnav-item">
             <div class="qnav-icon" style="background: #ede9fe; color: #7c3aed">

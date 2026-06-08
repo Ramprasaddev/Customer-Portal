@@ -17,6 +17,8 @@ export class AgingComponent implements OnInit {
   search  = '';
 
   totalOutstanding = 0;
+  selectedBucket: string | null = null;
+  bucketOrder = ['Current', '1-30', '31-60', '90+'];
   bucketList: { label: string; count: number; total: number; currency: string; pct: number; severity: 'success'|'warning'|'info'|'danger' }[] = [];
 
   // Chart
@@ -61,14 +63,28 @@ export class AgingComponent implements OnInit {
     if (!this.agingData) return;
     this.totalOutstanding = this.agingData.aging.reduce((s, i) => s + (parseFloat(i.NETWR) || 0), 0);
     const bs = this.agingData.bucketSummary || {};
-    this.bucketList = Object.entries(bs).map(([label, data]) => ({
-      label,
-      count   : data.count,
-      total   : data.total,
-      currency: data.currency,
-      pct     : this.totalOutstanding > 0 ? Math.round((data.total / this.totalOutstanding) * 100) : 0,
-      severity: this.bucketSeverity[label] || 'info',
-    }));
+
+    const normalized: Record<string, { count: number; total: number; currency: string }> = {};
+    Object.entries(bs).forEach(([label, data]) => {
+      const normalizedLabel = label === '61-90' ? '90+' : label;
+      if (!normalized[normalizedLabel]) {
+        normalized[normalizedLabel] = { count: 0, total: 0, currency: data.currency };
+      }
+      normalized[normalizedLabel].count += data.count;
+      normalized[normalizedLabel].total += data.total;
+    });
+
+    this.bucketList = this.bucketOrder.map(label => {
+      const data = normalized[label] || { count: 0, total: 0, currency: this.currency };
+      return {
+        label,
+        count   : data.count,
+        total   : data.total,
+        currency: data.currency,
+        pct     : this.totalOutstanding > 0 ? Math.round((data.total / this.totalOutstanding) * 100) : 0,
+        severity: this.bucketSeverity[label] || 'info',
+      };
+    });
   }
 
   buildChart(): void {
@@ -104,9 +120,26 @@ export class AgingComponent implements OnInit {
   applyFilter(): void {
     if (!this.agingData) return;
     const q = this.search.toLowerCase();
-    this.filteredItems = q
+    let rows = q
       ? this.agingData.aging.filter(i => Object.values(i).some(v => String(v).toLowerCase().includes(q)))
       : [...this.agingData.aging];
+
+    if (this.selectedBucket) {
+      rows = rows.filter(i => this.normalizeBucket(i.AGING_BUCKET) === this.selectedBucket);
+    }
+
+    this.filteredItems = rows;
+  }
+
+  selectBucket(bucket: string): void {
+    this.selectedBucket = this.selectedBucket === bucket ? null : bucket;
+    this.applyFilter();
+  }
+
+  normalizeBucket(bucket: string): string {
+    if (!bucket) { return 'Current'; }
+    if (bucket === '61-90') { return '90+'; }
+    return bucket;
   }
 
   onSearch(): void { this.applyFilter(); }

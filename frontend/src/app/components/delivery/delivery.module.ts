@@ -4,13 +4,14 @@ import { FormsModule }  from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ChartModule }  from 'primeng/chart';
 import { DeliveryComponent } from './delivery.component';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [DeliveryComponent],
   imports: [
     CommonModule, FormsModule,
     RouterModule.forChild([{ path: '', component: DeliveryComponent }]),
-    ChartModule,
+    ChartModule, SharedModule,
   ],
 })
 export class DeliveryModule {}

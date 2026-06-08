@@ -4,6 +4,7 @@ import { CommonModule }  from '@angular/common';
 import { FormsModule }   from '@angular/forms';
 import { RouterModule }  from '@angular/router';
 import { InvoiceComponent } from './invoice.component';
+import { SharedModule } from '../../shared/shared.module';
 
 // PrimeNG
 import { TableModule }    from 'primeng/table';
@@ -33,6 +34,7 @@ import { ChipModule }     from 'primeng/chip';
     BadgeModule,
     DividerModule,
     ChipModule,
+    SharedModule,
   ],
 })
 export class InvoiceModule {}
